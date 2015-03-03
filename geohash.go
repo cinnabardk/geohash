@@ -55,6 +55,39 @@ func DecodeInt(position uint64, bitDepth uint8) (float64, float64, float64, floa
 	return lat, lon, latErr, lonErr
 }
 
+// EncodeNeighborInt returns the neighbor of a location from a certain direction
+func EncodeNeighborInt(location uint64, l, r float64, bitDepth uint8) uint64 {
+	lat, lon, latErr, lonErr := DecodeInt(location, bitDepth)
+	neighborLat := lat + l*latErr*2
+	neighborLon := lon + r*lonErr*2
+
+	return EncodeInt(neighborLat, neighborLon, bitDepth)
+}
+
+// EncodeNeighborsInt returns the encoded neighbors of a certain location
+func EncodeNeighborsInt(location uint64, radiusBitDepth, bitDepth uint8) []uint64 {
+	lat, lon, latErr, lonErr := DecodeInt(location, bitDepth)
+	latErr *= 2
+	lonErr *= 2
+
+	encodeNeighborInt := func(l, r float64) uint64 {
+		neighborLat := lat + l*latErr
+		neighborLon := lon + r*lonErr
+		return EncodeInt(neighborLat, neighborLon, bitDepth)
+	}
+
+	return []uint64{
+		encodeNeighborInt(1, 0),
+		encodeNeighborInt(1, 1),
+		encodeNeighborInt(0, 1),
+		encodeNeighborInt(-1, 1),
+		encodeNeighborInt(-1, 0),
+		encodeNeighborInt(-1, -1),
+		encodeNeighborInt(0, -1),
+		encodeNeighborInt(1, -1),
+	}
+}
+
 func decodeBboxInt(locationHash uint64, bitDepth uint8) (float64, float64, float64, float64) {
 	var (
 		maxLat float64 = 90
