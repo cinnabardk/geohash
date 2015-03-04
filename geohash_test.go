@@ -35,7 +35,7 @@ func TestDecodeInt(t *testing.T) {
 }
 
 func TestNeighborsInt(t *testing.T) {
-	neighbors := EncodeNeighborsInt(1702789509, 48, 32)
+	neighbors := EncodeNeighborsInt(1702789509, 32)
 	neighborsTest := []uint64{
 		1702789520,
 		1702789522,
@@ -60,7 +60,7 @@ func TestNeighborsInt(t *testing.T) {
 		t.Fail()
 	}
 
-	neighbors = EncodeNeighborsInt(27898503327470, 46, 52)
+	neighbors = EncodeNeighborsInt(27898503327470, 52)
 	neighborsTest = []uint64{
 		27898503327471,
 		27898503349317,

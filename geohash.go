@@ -65,7 +65,7 @@ func EncodeNeighborInt(location uint64, l, r float64, bitDepth uint8) uint64 {
 }
 
 // EncodeNeighborsInt returns the encoded neighbors of a certain location
-func EncodeNeighborsInt(location uint64, radiusBitDepth, bitDepth uint8) []uint64 {
+func EncodeNeighborsInt(location uint64, bitDepth uint8) []uint64 {
 	lat, lon, latErr, lonErr := DecodeInt(location, bitDepth)
 	latErr *= 2
 	lonErr *= 2
