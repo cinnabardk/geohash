@@ -88,6 +88,33 @@ func EncodeNeighborsInt(location uint64, radiusBitDepth, bitDepth uint8) []uint6
 	}
 }
 
+// DistanceBetweenPoints computes the distance between two geo hashes
+func DistanceBetweenHashPoints(start, end uint64, bitDepth uint8) float64 {
+	startLat, startLon, _, _ := DecodeInt(start, bitDepth)
+	endLat, endLon, _, _ := DecodeInt(end, bitDepth)
+
+	return DistanceBetweenPoints(startLat, startLon, endLat, endLon)
+}
+
+// DistanceBetweenPoints computes the distance between two lat & lon coordinates
+func DistanceBetweenPoints(startLat, startLon, endLat, endLon float64) float64 {
+	dLat := rad(endLat - startLat)
+	dLon := rad(endLon - startLon)
+	a := math.Sin(dLat/2)*math.Sin(dLat/2) +
+		math.Cos(rad(startLat))*math.Cos(rad(startLon))*
+			math.Sin(dLon/2)*math.Sin(dLon/2)
+
+	return 6371 * 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
+}
+
+func rad(d float64) float64 {
+	return d * math.Pi / 180
+}
+
+func deg(r float64) float64 {
+	return r / math.Pi / 180
+}
+
 func decodeBboxInt(locationHash uint64, bitDepth uint8) (float64, float64, float64, float64) {
 	var (
 		maxLat float64 = 90

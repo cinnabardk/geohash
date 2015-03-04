@@ -6,6 +6,7 @@
 package geohash_test
 
 import (
+	"fmt"
 	"math"
 	"testing"
 
@@ -81,6 +82,18 @@ func TestNeighborsInt(t *testing.T) {
 	singleNeighbor = EncodeNeighborInt(27898503327470, -1, -1, 46)
 	if neighbors[5] != singleNeighbor {
 		t.Logf("neighbor mismatch expected: %d got: %d", neighbors[0], singleNeighbor)
+		t.Fail()
+	}
+}
+
+func TestDistanceBetweenHashPoints(t *testing.T) {
+	start := EncodeInt(50.066389, -5.714722, 52)
+	end := EncodeInt(58.643889, -3.070000, 52)
+
+	distance := fmt.Sprintf("%.4f", DistanceBetweenHashPoints(start, end, 52))
+
+	if "982.4086" != distance {
+		t.Logf("distance is different expected: %.4f got: %s", 982.4086, distance)
 		t.Fail()
 	}
 }
